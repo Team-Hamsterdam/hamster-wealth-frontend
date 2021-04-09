@@ -3,6 +3,9 @@ import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import LoggedInNavbar from "./LoggedInNavbar";
 import TradingViewWidget, { IntervalTypes, Themes } from "react-tradingview-widget";
 import styled from "styled-components";
+import CashModal from "./CashModal";
+import API from "../utils/API";
+import { useHistory } from "react-router-dom";
 
 const PortfolioContainer = styled(Container)`
   background-color: #2c3542;
@@ -23,12 +26,18 @@ const StyledTable = styled(Table)`
 const Portfolios = () => {
   const max_portfolios = 9;
   const [portfolios, setPortfolios] = useState([]);
+  const [currPortfolioId, setCurrPortfolioId] = useState(0);
   const [holdings, setHoldings] = useState([]);
   const [cash, setCash] = useState(0);
   const [netPortfolio, setNetPortfolio] = useState(0);
   const [todaysChange, setTodaysChange] = useState(0);
   const [chartTicker, setChartTicker] = useState("");
+  const [showAddCash, setShowAddCash] = useState(false);
+  const api = new API();
+  const history = useHistory();
 
+  const handleCloseCash = () => setShowAddCash(false);
+  const handleShowCash = () => setShowAddCash(true);
   const handleAddPortfolio = () => {
     setPortfolios([
       ...portfolios,
@@ -41,6 +50,23 @@ const Portfolios = () => {
   };
 
   useEffect(() => {
+    const getToken = async () => {
+      try {
+        const res = await api.getAPIRequest("gettoken");
+        const token = res.json();
+        if (res.ok) {
+          localStorage.setItem("token", token);
+        } else {
+          console.warn("Could not get token");
+          // history.push("/");
+        }
+      } catch (e) {
+        console.warn(e);
+        console.warn("Could not get token");
+        // history.push("/");
+      }
+    };
+    getToken();
     setPortfolios([
       {
         portfolio_id: 1,
@@ -127,6 +153,13 @@ const Portfolios = () => {
   return (
     <>
       <LoggedInNavbar />
+      <CashModal
+        show={showAddCash}
+        handleClose={handleCloseCash}
+        portfolioId={currPortfolioId}
+        setCash={setCash}
+        cash={cash}
+      />
       <PortfolioContainer>
         <Row>
           <Col className="px-4">
@@ -161,7 +194,14 @@ const Portfolios = () => {
                 <h4 className="py-0 my-0">Balance: ${cash}</h4>
               </Col>
               <Col className="d-flex px-0 justify-content-end" md={3}>
-                <Button className="mx-2">Add Cash</Button>
+                <Button
+                  className="mx-2"
+                  onClick={() => {
+                    handleShowCash();
+                  }}
+                >
+                  Add Cash
+                </Button>
                 <Button className="mx-2">Add Stock</Button>
               </Col>
             </PortfoliosRow>
@@ -200,7 +240,7 @@ const Portfolios = () => {
                       <th>Profit/Loss</th>
                       <th>Units</th>
                       <th>Purchase Price</th>
-                      <th>Market Value</th>
+                      <th>Market Price</th>
                       <th>Weight</th>
                       <th>Options</th>
                     </tr>

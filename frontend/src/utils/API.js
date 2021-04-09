@@ -60,6 +60,19 @@ export default class API {
     });
   }
 
+  /** @param {String} path */
+  /** @param {Object} query */
+  /** @param {String} token */
+  getAPIRequest(path) {
+    return fetch(`${this.url}/${path}/`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
   // Gets user data from given token
   /** @param {String} token */
   getAPIUserData(token) {
