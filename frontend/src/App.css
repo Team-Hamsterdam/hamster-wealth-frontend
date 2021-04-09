@@ -1,3 +1,35 @@
 .white {
-  color: white
+  color: white;
+}
+.red {
+  color: red;
+}
+
+.green {
+  color: #28cd83;
+}
+
+.table-col {
+  overflow-x: auto;
+}
+
+.btn-primary {
+  background-color: #E0E0E0;
+  color: #1F2937;
+  border: none;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+  color: #28cd83 !important;
+  background-color: #1F2937;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: white;
+}
+
+.navbar-light .navbar-brand {
+  font-size: 20pt;
+  color: white;
 }

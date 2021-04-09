@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 const LoggedOutNavbar = () => {
   const DarkNavbar = styled(Navbar)`
     background-color: #1f2937;
+    color: white;
   `;
 
   const GreenSpan = styled.span`
@@ -18,20 +19,27 @@ const LoggedOutNavbar = () => {
   return (
     <DarkNavbar expand="lg">
       <Navbar.Brand href="/portfolios">
-        <span className="white">Hamster </span>
+        <span>Hamster </span>
         <GreenSpan>Wealth</GreenSpan>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="ml-auto" defaultActiveKey="/portfolios">
+        <Nav variant="pills" className="ml-auto" defaultActiveKey="/portfolios">
           <Nav.Link as={NavLink} to="/portfolios">
-            <span className="white">Portfolios</span>
+            <span>Portfolios</span>
           </Nav.Link>
           <Nav.Link as={NavLink} to="/leaderboard">
-            <span className="white">Leaderboard</span>
+            <span>Leaderboard</span>
           </Nav.Link>
-          <Nav.Link as={NavLink} to="/">
-            <span className="white">Sign Out</span>
+          <Nav.Link
+            as={NavLink}
+            exact
+            to="/"
+            onClick={() => {
+              localStorage.removeItem("token");
+            }}
+          >
+            <span>Sign Out</span>
           </Nav.Link>
         </Nav>
       </Navbar.Collapse>

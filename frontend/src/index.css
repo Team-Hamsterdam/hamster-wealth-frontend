@@ -9,9 +9,18 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   background-color: #E8E8E8;
+  color: #1F2937;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+tr {
+  cursor: pointer;
+}
+
+#root {
+  background-color: #F8F8F8;
 }
