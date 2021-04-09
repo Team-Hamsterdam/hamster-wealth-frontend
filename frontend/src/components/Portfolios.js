@@ -4,6 +4,7 @@ import LoggedInNavbar from "./LoggedInNavbar";
 import TradingViewWidget, { IntervalTypes, Themes } from "react-tradingview-widget";
 import styled from "styled-components";
 import CashModal from "./CashModal";
+import StockModal from "./StockModal";
 import API from "../utils/API";
 import { useHistory } from "react-router-dom";
 
@@ -19,10 +20,6 @@ const PortfoliosRow = styled(Row)`
   background-color: #262f3d;
 `;
 
-const StyledTable = styled(Table)`
-  border: 1px solid black;
-`;
-
 const Portfolios = () => {
   const max_portfolios = 9;
   const [portfolios, setPortfolios] = useState([]);
@@ -33,11 +30,15 @@ const Portfolios = () => {
   const [todaysChange, setTodaysChange] = useState(0);
   const [chartTicker, setChartTicker] = useState("");
   const [showAddCash, setShowAddCash] = useState(false);
+  const [showAddStock, setShowAddStock] = useState(false);
   const api = new API();
   const history = useHistory();
 
   const handleCloseCash = () => setShowAddCash(false);
   const handleShowCash = () => setShowAddCash(true);
+  const handleCloseStock = () => setShowAddStock(false);
+  const handleShowStock = () => setShowAddStock(true);
+
   const handleAddPortfolio = () => {
     setPortfolios([
       ...portfolios,
@@ -97,6 +98,7 @@ const Portfolios = () => {
         company: "BPH Energy Ltd.",
         live_price: 200.2,
         change: "0.002 (7.69%)",
+        change_value: 600.4,
         profit_loss: "6,400.00 (133.33%)",
         units: 4200,
         avg_price: 0.15,
@@ -109,6 +111,7 @@ const Portfolios = () => {
         company: "Z1P Co.",
         live_price: 200.2,
         change: "0.002 (7.69%)",
+        change_value: 600.4,
         profit_loss: "6,400.00 (133.33%)",
         units: 4200,
         avg_price: 0.15,
@@ -121,6 +124,7 @@ const Portfolios = () => {
         company: "BPH Energy Ltd.",
         live_price: 200.2,
         change: "0.002 (7.69%)",
+        change_value: 600.4,
         profit_loss: "6,400.00 (133.33%)",
         units: 4200,
         avg_price: 0.15,
@@ -133,6 +137,7 @@ const Portfolios = () => {
         company: "BPH Energy Ltd.",
         live_price: 200.2,
         change: "0.002 (7.69%)",
+        change_value: 600.4,
         profit_loss: "6,400.00 (133.33%)",
         units: 4200,
         avg_price: 0.15,
@@ -154,6 +159,13 @@ const Portfolios = () => {
         portfolioId={currPortfolioId}
         setCash={setCash}
         cash={cash}
+      />
+      <StockModal
+        show={showAddStock}
+        handleClose={handleCloseStock}
+        portfolioId={currPortfolioId}
+        setHoldings={setHoldings}
+        holdings={holdings}
       />
       <PortfolioContainer>
         <Row>
@@ -198,7 +210,14 @@ const Portfolios = () => {
                 >
                   Add Cash
                 </Button>
-                <Button className="mx-2">Add Stock</Button>
+                <Button
+                  className="mx-2"
+                  onClick={() => {
+                    handleShowStock();
+                  }}
+                >
+                  Add Stock
+                </Button>
               </Col>
             </PortfoliosRow>
             <PortfoliosRow className="align-items-center my-3 py-2 rounded" md={12}>
@@ -224,6 +243,15 @@ const Portfolios = () => {
                 />
               </ChartCol>
             </PortfoliosRow>
+            <PortfoliosRow
+              className={
+                chartTicker.length === 0 ? "align-items-center my-3 p-2 rounded" : "d-none"
+              }
+              md={12}
+            >
+              <div>Click on a ticker or company to show its chart</div>
+            </PortfoliosRow>
+
             <PortfoliosRow className="align-items-center my-3 py-2 rounded" md={12}>
               <Col md={12} className="table-col px-2">
                 <Table style={{ backgroundColor: "#293240" }} striped bordered hover>
@@ -232,13 +260,15 @@ const Portfolios = () => {
                       <th>#</th>
                       <th>Ticker</th>
                       <th>Company</th>
-                      <th>Change</th>
-                      <th>Profit/Loss</th>
                       <th>Units</th>
                       <th>Purchase Price</th>
-                      <th>Market Price</th>
+                      <th>Last Price</th>
+                      <th>Market Value</th>
+                      <th>Profit/Loss</th>
+                      <th>Change</th>
+                      <th>Change Value</th>
                       <th>Weight</th>
-                      <th>Options</th>
+                      <th>Settings</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -268,11 +298,13 @@ const Portfolios = () => {
                         >
                           {stock.company}
                         </td>
-                        <td>${stock.live_price}</td>
-                        <td>{stock.change}</td>
                         <td>{stock.units}</td>
                         <td>${stock.avg_price}</td>
+                        <td>${stock.live_price}</td>
                         <td>${stock.value}</td>
+                        <td>${stock.profit_loss}</td>
+                        <td>${stock.change}</td>
+                        <td>${stock.change_value}</td>
                         <td>{stock.weight}%</td>
                         <td>
                           <Row md={12} className="align-items-center justify-content-center">
