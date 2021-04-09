@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
-import { Nav, Navbar, NavDropdown, Form, FormControl, Button } from "react-bootstrap";
+import React from "react";
+import { Navbar } from "react-bootstrap";
 import styled from "styled-components";
-import { Link, NavLink } from "react-router-dom";
 
 const LoggedOutNavbar = () => {
   const DarkNavbar = styled(Navbar)`

@@ -7,8 +7,10 @@ import {
   GoogleLoginButton,
   DiscordLoginButton,
 } from "react-social-login-buttons";
+import API from "../utils/API";
 
 const Login = () => {
+  const api = new API();
   const StyledContainer = styled(Container)`
     background-color: #e8e8e8;
     height: 90vh;
@@ -18,6 +20,7 @@ const Login = () => {
     border: 1px solid black;
     background-color: white;
   `;
+
   return (
     <>
       <LoggedOutNavbar />
@@ -26,9 +29,15 @@ const Login = () => {
           <Col md={12}>
             <h4 className="display-4">Log In</h4>
             <LoginContainer className="rounded p-4 mb-4">
-              <GoogleLoginButton />
-              <GithubLoginButton />
-              <DiscordLoginButton />
+              <a href={`${api.url}/login`}>
+                <GoogleLoginButton />
+              </a>
+              <a href={`${api.url}/githublogin`}>
+                <GithubLoginButton />
+              </a>
+              <a href={`${api.url}/discordlogin`}>
+                <DiscordLoginButton />
+              </a>
             </LoginContainer>
           </Col>
         </Row>
