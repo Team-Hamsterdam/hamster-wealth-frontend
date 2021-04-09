@@ -2,15 +2,15 @@ import React from "react";
 import { Navbar } from "react-bootstrap";
 import styled from "styled-components";
 
+const DarkNavbar = styled(Navbar)`
+  background-color: #1f2937;
+`;
+
+const GreenSpan = styled.span`
+  color: #28cd83;
+`;
+
 const LoggedOutNavbar = () => {
-  const DarkNavbar = styled(Navbar)`
-    background-color: #1f2937;
-  `;
-
-  const GreenSpan = styled.span`
-    color: #28cd83;
-  `;
-
   return (
     <DarkNavbar expand="lg">
       <Navbar.Brand href="/">

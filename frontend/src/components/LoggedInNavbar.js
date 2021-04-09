@@ -3,16 +3,16 @@ import { Nav, Navbar } from "react-bootstrap";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
+const DarkNavbar = styled(Navbar)`
+  background-color: #1f2937;
+  color: white;
+`;
+
+const GreenSpan = styled.span`
+  color: #28cd83;
+`;
+
 const LoggedOutNavbar = () => {
-  const DarkNavbar = styled(Navbar)`
-    background-color: #1f2937;
-    color: white;
-  `;
-
-  const GreenSpan = styled.span`
-    color: #28cd83;
-  `;
-
   useEffect(() => {
     console.log(window.location.href);
   }, []);

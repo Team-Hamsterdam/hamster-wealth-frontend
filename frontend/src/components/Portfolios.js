@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import LoggedInNavbar from "./LoggedInNavbar";
-import TradingViewWidget, { IntervalTypes } from "react-tradingview-widget";
+import TradingViewWidget, { IntervalTypes, Themes } from "react-tradingview-widget";
 import styled from "styled-components";
 
 const PortfolioContainer = styled(Container)`
-  background-color: #f0f0f0;
+  background-color: #2c3542;
   padding-bottom: 50px;
 `;
 const ChartCol = styled(Col)`
@@ -13,16 +13,32 @@ const ChartCol = styled(Col)`
 `;
 
 const PortfoliosRow = styled(Row)`
-  background-color: #e8e8e8;
+  background-color: #262f3d;
+`;
+
+const StyledTable = styled(Table)`
+  border: 1px solid black;
 `;
 
 const Portfolios = () => {
+  const max_portfolios = 9;
   const [portfolios, setPortfolios] = useState([]);
   const [holdings, setHoldings] = useState([]);
   const [cash, setCash] = useState(0);
   const [netPortfolio, setNetPortfolio] = useState(0);
   const [todaysChange, setTodaysChange] = useState(0);
   const [chartTicker, setChartTicker] = useState("");
+
+  const handleAddPortfolio = () => {
+    setPortfolios([
+      ...portfolios,
+      {
+        portfolio_id: portfolios.length,
+        title: `Portfolio ${portfolios.length + 1}`,
+        cash: 0,
+      },
+    ]);
+  };
 
   useEffect(() => {
     setPortfolios([
@@ -105,9 +121,9 @@ const Portfolios = () => {
     ]);
 
     setCash(4356214321);
-
     setNetPortfolio(94929494);
   }, []);
+
   return (
     <>
       <LoggedInNavbar />
@@ -115,7 +131,11 @@ const Portfolios = () => {
         <Row>
           <Col className="px-4">
             <PortfoliosRow
-              className="justify-content-start align-items-center my-3 rounded"
+              className={
+                portfolios.length !== max_portfolios
+                  ? "justify-content-start align-items-center my-3 py-2 rounded"
+                  : "justify-content-between align-items-center my-3 py-2 rounded"
+              }
               md={12}
             >
               {portfolios.map((portfolio, key) => (
@@ -123,6 +143,18 @@ const Portfolios = () => {
                   {portfolio.title}
                 </Button>
               ))}
+              {portfolios.length < max_portfolios ? (
+                <Button
+                  onClick={() => {
+                    handleAddPortfolio();
+                  }}
+                  className="rounded-circle mx-2"
+                >
+                  +
+                </Button>
+              ) : (
+                ""
+              )}
             </PortfoliosRow>
             <PortfoliosRow className="rounded align-items-center my-3 py-2" md={12}>
               <Col md={9}>
@@ -134,20 +166,31 @@ const Portfolios = () => {
               </Col>
             </PortfoliosRow>
             <PortfoliosRow className="align-items-center my-3 py-2 rounded" md={12}>
-              <Col md={12}>
-                <h4 className="py-0 my-0">
-                  Net Portfolio: ${netPortfolio} | Today's Change: $999999999 (%99999)
-                </h4>
+              <Col md={6} className="d-flex justify-content-start">
+                <h4 className="py-0 my-0">Net Portfolio: ${netPortfolio}</h4>
+              </Col>
+              <Col md={6} className="d-flex justify-content-end">
+                <h4 className="py-0 my-0">Today's Change: $999999999 (%99999)</h4>
               </Col>
             </PortfoliosRow>
-            <PortfoliosRow className="align-items-center my-3 p-2 rounded" md={12}>
+            <PortfoliosRow
+              className={
+                chartTicker.length !== 0 ? "align-items-center my-3 p-2 rounded" : "d-none"
+              }
+              md={12}
+            >
               <ChartCol md={12}>
-                <TradingViewWidget symbol={`${chartTicker}`} interval={IntervalTypes.D} autosize />
+                <TradingViewWidget
+                  theme={Themes.DARK}
+                  symbol={`${chartTicker}`}
+                  interval={IntervalTypes.D}
+                  autosize
+                />
               </ChartCol>
             </PortfoliosRow>
             <PortfoliosRow className="align-items-center my-3 py-2 rounded" md={12}>
               <Col md={12} className="table-col px-2">
-                <Table striped bordered hover>
+                <Table style={{ backgroundColor: "#293240" }} striped bordered hover>
                   <thead>
                     <tr>
                       <th>#</th>
@@ -156,7 +199,7 @@ const Portfolios = () => {
                       <th>Change</th>
                       <th>Profit/Loss</th>
                       <th>Units</th>
-                      <th>Average Purchase Price</th>
+                      <th>Purchase Price</th>
                       <th>Market Value</th>
                       <th>Weight</th>
                       <th>Options</th>
@@ -164,15 +207,31 @@ const Portfolios = () => {
                   </thead>
                   <tbody>
                     {holdings.map((stock, key) => (
-                      <tr
-                        onClick={() => {
-                          setChartTicker(stock.ticker);
-                        }}
-                        key={key}
-                      >
-                        <td>{key + 1}</td>
-                        <td>{stock.ticker}</td>
-                        <td>{stock.company}</td>
+                      <tr key={key}>
+                        <td
+                          className="stock-clickable"
+                          onClick={() => {
+                            setChartTicker(stock.ticker);
+                          }}
+                        >
+                          {key + 1}
+                        </td>
+                        <td
+                          className="stock-clickable"
+                          onClick={() => {
+                            setChartTicker(stock.ticker);
+                          }}
+                        >
+                          {stock.ticker}
+                        </td>
+                        <td
+                          className="stock-clickable"
+                          onClick={() => {
+                            setChartTicker(stock.ticker);
+                          }}
+                        >
+                          {stock.company}
+                        </td>
                         <td>${stock.live_price}</td>
                         <td>{stock.change}</td>
                         <td>{stock.units}</td>

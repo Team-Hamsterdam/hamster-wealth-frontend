@@ -9,26 +9,25 @@ import {
 } from "react-social-login-buttons";
 import API from "../utils/API";
 
+const StyledContainer = styled(Container)`
+  background-color: #1f2937;
+`;
+
+const LoginContainer = styled.div`
+  background-color: #323b48;
+  padding: 50px;
+`;
+
 const Login = () => {
   const api = new API();
-  const StyledContainer = styled(Container)`
-    background-color: #e8e8e8;
-    height: 90vh;
-  `;
-
-  const LoginContainer = styled.div`
-    border: 1px solid black;
-    background-color: white;
-  `;
-
   return (
     <>
       <LoggedOutNavbar />
       <StyledContainer md={12} className="d-flex justify-content-center" fluid>
         <Row md={12}>
           <Col md={12}>
-            <h4 className="display-4">Log In</h4>
-            <LoginContainer className="rounded p-4 mb-4">
+            <h4 className="display-4 white mb-4">Log In</h4>
+            <LoginContainer className="rounded">
               <a href={`${api.url}/login`}>
                 <GoogleLoginButton />
               </a>
