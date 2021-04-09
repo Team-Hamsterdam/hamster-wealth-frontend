@@ -71,27 +71,22 @@ const Portfolios = () => {
       {
         portfolio_id: 1,
         title: "Portfolio 1",
-        cash: 9999999999.33131,
       },
       {
         portfolio_id: 2,
         title: "Portfolio 2",
-        cash: 9999999999.33131,
       },
       {
         portfolio_id: 3,
         title: "Portfolio 3",
-        cash: 9999999999.33131,
       },
       {
         portfolio_id: 4,
         title: "Portfolio 4",
-        cash: 9999999999.33131,
       },
       {
         portfolio_id: 5,
         title: "Portfolio 5",
-        cash: 9999999999.33131,
       },
     ]);
 
@@ -176,6 +171,7 @@ const Portfolios = () => {
                   {portfolio.title}
                 </Button>
               ))}
+
               {portfolios.length < max_portfolios ? (
                 <Button
                   onClick={() => {
