@@ -311,7 +311,9 @@ const Portfolios = () => {
               <Col md={6} className="d-flex justify-content-start">
                 <h4 className="py-0 my-0">
                   Net Portfolio:{" "}
-                  <span className={netPortfolio < 0 ? "red" : "green"}>${netPortfolio}</span>
+                  <span className={netPortfolio < 0 ? "red" : "green"}>
+                    ${parseFloat(netPortfolio).toFixed(2)}
+                  </span>
                 </h4>
               </Col>
               <Col md={6} className="d-flex justify-content-end">

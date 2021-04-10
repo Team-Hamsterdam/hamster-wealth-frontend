@@ -82,7 +82,9 @@ const Login = () => {
                 </Alert>
 
                 <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Username</Form.Label>
+                  <Form.Label>
+                    <span class="white">Username</span>
+                  </Form.Label>
                   <Form.Control
                     onChange={(e) => {
                       setUsername(e.target.value);
@@ -93,7 +95,9 @@ const Login = () => {
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
+                  <Form.Label>
+                    <span class="white">Password</span>
+                  </Form.Label>
                   <Form.Control
                     onChange={(e) => {
                       setPassword(e.target.value);
