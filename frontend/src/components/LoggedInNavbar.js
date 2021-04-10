@@ -32,11 +32,11 @@ const LoggedOutNavbar = () => {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav variant="pills" className="ml-auto" defaultActiveKey="/portfolios">
           <Nav.Link as={NavLink} to="/portfolios">
-            <span>Portfolios</span>
+            <span>Virtual Portfolios</span>
           </Nav.Link>
-          <Nav.Link as={NavLink} to="/leaderboard">
+          {/* <Nav.Link as={NavLink} to="/leaderboard">
             <span>Leaderboard</span>
-          </Nav.Link>
+          </Nav.Link> */}
           <Nav.Link
             as={NavLink}
             exact

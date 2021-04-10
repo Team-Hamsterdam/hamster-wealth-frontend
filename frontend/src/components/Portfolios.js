@@ -60,7 +60,7 @@ const Portfolios = () => {
           ...portfolios,
           {
             portfolio_id: data.portfolio_id,
-            title: `Portfolio ${portfolios.length + 1}`,
+            title: `Virtual Portfolio`,
             cash: 0,
           },
         ]);
@@ -72,6 +72,9 @@ const Portfolios = () => {
       console.warn("Could not add portfolio");
       // history.push("/");
     }
+  };
+  const handleChangePortfolio = (portfolioId) => {
+    setCurrPortfolioId(portfolioId);
   };
 
   useEffect(() => {
@@ -100,13 +103,8 @@ const Portfolios = () => {
         console.warn("Could not get portfolios");
       }
     };
-
     loadPortfolios();
   }, []);
-
-  const handleChangePortfolio = (portfolioId) => {
-    setCurrPortfolioId(portfolioId);
-  };
 
   useEffect(() => {
     const loadHoldings = async () => {
@@ -114,7 +112,6 @@ const Portfolios = () => {
 
       const query = { portfolio_id: currPortfolioId };
       try {
-        console.log(api);
         const res = await fetch(`${api}/portfolio/holdings?` + new URLSearchParams(query), {
           method: "GET",
           headers: {
@@ -164,36 +161,33 @@ const Portfolios = () => {
 
     const loadNetPortfolio = () => {
       const sum = holdings.reduce(function (a, b) {
-        return a + b.value;
+        return a + parseFloat(b.value.substring(1));
       }, 0);
       setNetPortfolio(sum);
     };
 
     const loadTodaysChange = () => {
       const changeValue = holdings.reduce(function (a, b) {
-        return a + b.change_value;
+        if (b.change_value.startsWith("-")) {
+          return a - parseFloat(b.change_value.substring(2));
+        } else {
+          return a + parseFloat(b.change_value.substring(1));
+        }
       }, 0);
-
-      const changePercent = holdings.reduce(function (a, b) {
-        return a + b.change;
-      }, 0);
-
-      const avgChangePercent =
-        holdings.length !== 0 ? (changePercent / holdings.length).toFixed(2) : 0;
-      setTodaysChange(`${changeValue} (${avgChangePercent}%)`);
+      console.log(changeValue);
+      setTodaysChange(`$${changeValue}`);
     };
 
     loadHoldings();
     loadBalance();
     loadNetPortfolio();
     loadTodaysChange();
-    console.log(currPortfolioId, holdings);
   }, [currPortfolioId, holdings]);
 
   const handleDeletePortfolio = async () => {
     const token = localStorage.getItem("token");
-
     const query = { portfolio_id: currPortfolioId };
+
     try {
       const res = await fetch(`${api}/portfolios/removeportfolio?` + new URLSearchParams(query), {
         method: "DELETE",
@@ -210,6 +204,8 @@ const Portfolios = () => {
         const newPortfoliosList = portfolios;
         newPortfoliosList.splice(index, 1);
         setPortfolios([...newPortfoliosList]);
+
+        setCurrPortfolioId(newPortfoliosList[0].portfolio_id);
       } else {
         console.warn(data.message);
       }
@@ -291,7 +287,9 @@ const Portfolios = () => {
             </PortfoliosRow>
             <PortfoliosRow className="rounded align-items-center my-3 py-2" md={12}>
               <Col md={9}>
-                <h4 className="py-0 my-0">Balance: ${cash}</h4>
+                <h4 className="py-0 my-0">
+                  Balance: <span className={cash < 0 ? "red" : "green"}>${cash}</span>
+                </h4>
               </Col>
               <Col className="d-flex px-0 justify-content-end" md={3}>
                 <Button
@@ -314,10 +312,32 @@ const Portfolios = () => {
             </PortfoliosRow>
             <PortfoliosRow className="align-items-center my-3 py-2 rounded" md={12}>
               <Col md={6} className="d-flex justify-content-start">
-                <h4 className="py-0 my-0">Net Portfolio: ${netPortfolio}</h4>
+                <h4 className="py-0 my-0">
+                  Net Portfolio:{" "}
+                  <span className={netPortfolio < 0 ? "red" : "green"}>${netPortfolio}</span>
+                </h4>
               </Col>
               <Col md={6} className="d-flex justify-content-end">
-                <h4 className="py-0 my-0">Today's Change: {todaysChange}</h4>
+                <h4 className="py-0 my-0">
+                  Today's Change:{" "}
+                  <span
+                    className={
+                      holdings.reduce(function (a, b) {
+                        if (b.change_value.startsWith("-")) {
+                          return a - parseFloat(b.change_value.substring(2));
+                        } else {
+                          return a + parseFloat(b.change_value.substring(1));
+                        }
+                      }, 0) < 0
+                        ? "red"
+                        : "green"
+                    }
+                  >
+                    {todaysChange && todaysChange.substring(1).startsWith("-")
+                      ? `-$${todaysChange && todaysChange.substring(2)}`
+                      : `$${todaysChange && todaysChange.substring(1)}`}
+                  </span>
+                </h4>
               </Col>
             </PortfoliosRow>
             <PortfoliosRow
@@ -433,7 +453,11 @@ const Portfolios = () => {
               className="justify-content-start align-items-center my-3 p-2 rounded"
               md={12}
             >
-              <Button variant="danger" className="w-100" onClick={() => handleDeletePortfolio()}>
+              <Button
+                variant="danger"
+                className={portfolios.length <= 1 ? "d-none" : "w-100"}
+                onClick={() => handleDeletePortfolio()}
+              >
                 Delete Portfolio
               </Button>
             </PortfoliosRow>
