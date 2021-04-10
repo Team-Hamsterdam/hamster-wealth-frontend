@@ -22,8 +22,8 @@ const PortfoliosRow = styled(Row)`
 `;
 
 const Portfolios = () => {
-  const max_portfolios = 9;
-  const [portfolios, setPortfolios] = useState([]);
+  // const max_portfolios = 9;
+  // const [portfolios, setPortfolios] = useState([]);
   const [currPortfolioId, setCurrPortfolioId] = useState(0);
   const [holdings, setHoldings] = useState([]);
   const [cash, setCash] = useState(0);
@@ -42,40 +42,40 @@ const Portfolios = () => {
   const handleCloseSellStock = () => setShowSellStock(false);
   const handleShowSellStock = () => setShowSellStock(true);
 
-  const handleAddPortfolio = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${api}/portfolios/create`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-      });
+  // const handleAddPortfolio = async () => {
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     const res = await fetch(`${api}/portfolios/create`, {
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //         Authorization: `${token}`,
+  //       },
+  //     });
 
-      const data = await res.json();
-      if (res.ok) {
-        setPortfolios([
-          ...portfolios,
-          {
-            portfolio_id: data.portfolio_id,
-            title: `Virtual Portfolio`,
-            cash: 0,
-          },
-        ]);
-      } else {
-        console.warn(data.message);
-      }
-    } catch (e) {
-      console.warn(e);
-      console.warn("Could not add portfolio");
-      // history.push("/");
-    }
-  };
-  const handleChangePortfolio = (portfolioId) => {
-    setCurrPortfolioId(portfolioId);
-  };
+  //     const data = await res.json();
+  //     if (res.ok) {
+  //       setPortfolios([
+  //         ...portfolios,
+  //         {
+  //           portfolio_id: data.portfolio_id,
+  //           title: `Virtual Portfolio`,
+  //           cash: 0,
+  //         },
+  //       ]);
+  //     } else {
+  //       console.warn(data.message);
+  //     }
+  //   } catch (e) {
+  //     console.warn(e);
+  //     console.warn("Could not add portfolio");
+  //     // history.push("/");
+  //   }
+  // };
+  // const handleChangePortfolio = (portfolioId) => {
+  //   setCurrPortfolioId(portfolioId);
+  // };
 
   useEffect(() => {
     const loadPortfolios = async () => {
@@ -91,7 +91,6 @@ const Portfolios = () => {
         });
         const data = await res.json();
         if (res.ok) {
-          setPortfolios([...data.portfolio_list]);
           if (data) {
             setCurrPortfolioId(data.portfolio_list[0].portfolio_id);
           }
@@ -184,36 +183,36 @@ const Portfolios = () => {
     loadTodaysChange();
   }, [currPortfolioId, holdings]);
 
-  const handleDeletePortfolio = async () => {
-    const token = localStorage.getItem("token");
-    const query = { portfolio_id: currPortfolioId };
+  // const handleDeletePortfolio = async () => {
+  //   const token = localStorage.getItem("token");
+  //   const query = { portfolio_id: currPortfolioId };
 
-    try {
-      const res = await fetch(`${api}/portfolios/removeportfolio?` + new URLSearchParams(query), {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-      });
-      const data = await res.json();
+  //   try {
+  //     const res = await fetch(`${api}/portfolios/removeportfolio?` + new URLSearchParams(query), {
+  //       method: "DELETE",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //         Authorization: `${token}`,
+  //       },
+  //     });
+  //     const data = await res.json();
 
-      if (res.ok) {
-        const index = portfolios.map((e) => e.portfolio_id).indexOf(currPortfolioId);
-        const newPortfoliosList = portfolios;
-        newPortfoliosList.splice(index, 1);
-        setPortfolios([...newPortfoliosList]);
+  //     if (res.ok) {
+  //       const index = portfolios.map((e) => e.portfolio_id).indexOf(currPortfolioId);
+  //       const newPortfoliosList = portfolios;
+  //       newPortfoliosList.splice(index, 1);
+  //       setPortfolios([...newPortfoliosList]);
 
-        setCurrPortfolioId(newPortfoliosList[0].portfolio_id);
-      } else {
-        console.warn(data.message);
-      }
-    } catch (e) {
-      console.warn(e);
-      console.warn("Could not get portfolios");
-    }
-  };
+  //       setCurrPortfolioId(newPortfoliosList[0].portfolio_id);
+  //     } else {
+  //       console.warn(data.message);
+  //     }
+  //   } catch (e) {
+  //     console.warn(e);
+  //     console.warn("Could not get portfolios");
+  //   }
+  // };
 
   const handleSetChartTicker = (ticker) => {
     if (ticker.endsWith(".AX")) {
@@ -254,7 +253,7 @@ const Portfolios = () => {
       <PortfolioContainer>
         <Row>
           <Col className="px-4">
-            <PortfoliosRow
+            {/* <PortfoliosRow
               className={
                 portfolios.length !== max_portfolios
                   ? "justify-content-start align-items-center my-3 py-2 rounded"
@@ -284,7 +283,7 @@ const Portfolios = () => {
               ) : (
                 ""
               )}
-            </PortfoliosRow>
+            </PortfoliosRow> */}
             <PortfoliosRow className="rounded align-items-center my-3 py-2" md={12}>
               <Col md={9}>
                 <h4 className="py-0 my-0">
@@ -449,7 +448,7 @@ const Portfolios = () => {
               </PortfoliosRow>
             )}
 
-            <PortfoliosRow
+            {/* <PortfoliosRow
               className="justify-content-start align-items-center my-3 p-2 rounded"
               md={12}
             >
@@ -460,7 +459,7 @@ const Portfolios = () => {
               >
                 Delete Portfolio
               </Button>
-            </PortfoliosRow>
+            </PortfoliosRow> */}
           </Col>
         </Row>
       </PortfolioContainer>
