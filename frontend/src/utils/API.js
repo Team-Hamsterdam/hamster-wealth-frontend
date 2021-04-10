@@ -1,7 +1,7 @@
 export default class API {
   /** @param {String} url */
   constructor() {
-    this.url = `http://localhost:4500`;
+    this.url = `https://hamsterwealth.herokuapp.com`;
   }
 
   /** @param {String} path */

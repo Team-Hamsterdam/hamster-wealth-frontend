@@ -58,7 +58,15 @@ const StockModal = ({ show, handleClose, portfolioId, setHoldings, holdings }) =
         quantity: quantity,
       };
 
-      const res = await api.postAPIRequestBodyToken("portfolio/buyholding", body, token);
+      const res = await fetch(`${api.url}/portfolio/buyholding`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+        body: JSON.stringify(body),
+      });
       const data = await res.json();
 
       if (res.ok) {
