@@ -110,8 +110,8 @@ const StockModal = ({ show, handleClose, portfolioId, setHoldings, holdings }) =
                 placeholder="TSLA"
               />
               <Form.Text className="text-muted">
-                Please enter the ticker symbol. If you're looking for ASX listed stocks, add ".AX"
-                to the end (i.e Z1P.AX).
+                Please enter the ticker symbol for stock. (Only American Stocks are officially
+                supported)
               </Form.Text>
             </Form.Group>
 
