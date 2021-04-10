@@ -425,11 +425,11 @@ const Portfolios = () => {
                                     setStockToSell(stock);
                                     handleShowSellStock();
                                   }}
-                                  className="mx-2 mb-1 w-100"
+                                  className="mx-2 my-0 w-100"
                                 >
                                   Sell
                                 </Button>
-                                <Button className="mx-2 mt-1 w-100">Remove</Button>
+                                {/* <Button className="mx-2 mt-1 w-100">Remove</Button> */}
                               </Row>
                             </td>
                           </tr>

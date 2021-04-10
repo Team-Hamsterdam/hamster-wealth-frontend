@@ -138,7 +138,7 @@ const StockModal = ({ show, handleClose, portfolioId, setHoldings, holdings }) =
                 placeholder="2000"
               />
             </Form.Group>
-            <p>
+            <p className="black">
               Value: $
               {!isNaN(purchasePrice) &&
               !isNaN(parseFloat(purchasePrice)) &&
