@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Form, Modal, Alert } from "react-bootstrap";
-import API from "../utils/API";
+import { api } from "../utils/API";
 
 const StockModal = ({ show, handleClose, portfolioId, setHoldings, holdings }) => {
   const [showAlert, setShowAlert] = useState(false);
@@ -16,7 +16,6 @@ const StockModal = ({ show, handleClose, portfolioId, setHoldings, holdings }) =
   };
 
   const handleAddStock = async () => {
-    const api = new API();
     const token = localStorage.getItem("token");
     if (ticker.length === 0) {
       setAlertText("Ticker cannot be empty");
@@ -58,7 +57,7 @@ const StockModal = ({ show, handleClose, portfolioId, setHoldings, holdings }) =
         quantity: quantity,
       };
 
-      const res = await fetch(`${api.url}/portfolio/buyholding`, {
+      const res = await fetch(`${api}/portfolio/buyholding`, {
         method: "POST",
         headers: {
           Accept: "application/json",

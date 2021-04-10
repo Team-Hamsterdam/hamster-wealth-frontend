@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
 import LoggedInNavbar from "./LoggedInNavbar";
-import API from "../utils/API";
+import { api } from "../utils/API";
 
 const LeaderboardContainer = styled(Container)`
   background-color: #2c3542;
@@ -18,7 +18,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const getLeaderboard = async () => {
       const token = localStorage.getItem("token");
-      const api = new API();
+
       try {
         const res = await api.getAPIRequestToken("user/list", token);
         const data = await res.json();

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Form, Modal, Alert } from "react-bootstrap";
-import API from "../utils/API";
+import { api } from "../utils/API";
 
 const CashModal = ({ show, handleClose, portfolioId, setCash, cash }) => {
   const [cashAmount, setCashAmount] = useState(0);
@@ -16,7 +16,6 @@ const CashModal = ({ show, handleClose, portfolioId, setCash, cash }) => {
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
   const handleAddCash = async () => {
-    const api = new API();
     const token = localStorage.getItem("token");
     if (!cashAmount || cashAmount === 0 || isNaN(cashAmount) || isNaN(parseFloat(cashAmount))) {
       setAlertText("Please specify a valid amount of cash to add");

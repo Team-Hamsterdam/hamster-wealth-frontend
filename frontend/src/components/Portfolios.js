@@ -5,7 +5,7 @@ import TradingViewWidget, { IntervalTypes, Themes } from "react-tradingview-widg
 import styled from "styled-components";
 import CashModal from "./CashModal";
 import StockModal from "./StockModal";
-import API from "../utils/API";
+import { api } from "../utils/API";
 import { useHistory } from "react-router-dom";
 
 const PortfolioContainer = styled(Container)`
@@ -41,9 +41,8 @@ const Portfolios = () => {
 
   const handleAddPortfolio = async () => {
     try {
-      const api = new API();
       const token = localStorage.getItem("token");
-      const res = await fetch(`${api.url}/portfolios/create`, {
+      const res = await fetch(`${api}/portfolios/create`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -75,8 +74,7 @@ const Portfolios = () => {
   useEffect(() => {
     const getToken = async () => {
       try {
-        const api = new API();
-        const res = await fetch(`${api.url}/gettoken`, {
+        const res = await fetch(`${api}/gettoken`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -99,9 +97,8 @@ const Portfolios = () => {
 
     const loadPortfolios = async () => {
       try {
-        const api = new API();
         const token = localStorage.getItem("token");
-        const res = await fetch(`${api.url}/portfolios/list`, {
+        const res = await fetch(`${api}/portfolios/list`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -213,10 +210,10 @@ const Portfolios = () => {
   useEffect(() => {
     const loadHoldings = async () => {
       const token = localStorage.getItem("token");
-      const api = new API();
+
       const query = { portfolio_id: currPortfolioId };
       try {
-        const res = await fetch(`${api.url}/portfolio/holdings/?` + new URLSearchParams(query), {
+        const res = await fetch(`${api}/portfolio/holdings/?` + new URLSearchParams(query), {
           method: "GET",
           headers: {
             Accept: "application/json",
@@ -239,10 +236,10 @@ const Portfolios = () => {
 
     const loadBalance = async () => {
       const token = localStorage.getItem("token");
-      const api = new API();
+
       const query = { portfolio_id: currPortfolioId };
       try {
-        const res = await fetch(`${api.url}/portfolio/getbalance/?` + new URLSearchParams(query), {
+        const res = await fetch(`${api}/portfolio/getbalance/?` + new URLSearchParams(query), {
           method: "GET",
           headers: {
             Accept: "application/json",
@@ -292,20 +289,17 @@ const Portfolios = () => {
 
   const handleDeletePortfolio = async () => {
     const token = localStorage.getItem("token");
-    const api = new API();
+
     const query = { portfolio_id: currPortfolioId };
     try {
-      const res = await fetch(
-        `${api.url}/portfolios/removeportfolio/?` + new URLSearchParams(query),
-        {
-          method: "DELETE",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `${token}`,
-          },
-        }
-      );
+      const res = await fetch(`${api}/portfolios/removeportfolio/?` + new URLSearchParams(query), {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      });
       const data = await res.json();
 
       if (res.ok) {
