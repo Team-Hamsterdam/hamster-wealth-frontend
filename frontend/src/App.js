@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Portfolios from "./components/Portfolios";
 import Leaderboard from "./components/Leaderboard";
+import About from "./components/About";
 import Register from "./components/Register";
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
         <Route exact path="/" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/portfolios" component={Portfolios} />
-        <Route path="/leaderboard" component={Leaderboard} />
+        <Route path="/about" component={About} />
       </Router>
     </>
   );

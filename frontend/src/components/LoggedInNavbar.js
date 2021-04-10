@@ -34,9 +34,9 @@ const LoggedOutNavbar = () => {
           <Nav.Link as={NavLink} to="/portfolios">
             <span>Virtual Portfolios</span>
           </Nav.Link>
-          {/* <Nav.Link as={NavLink} to="/leaderboard">
-            <span>Leaderboard</span>
-          </Nav.Link> */}
+          <Nav.Link as={NavLink} to="/about">
+            <span>About</span>
+          </Nav.Link>
           <Nav.Link
             as={NavLink}
             exact
