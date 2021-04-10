@@ -5,6 +5,7 @@ import TradingViewWidget, { IntervalTypes, Themes } from "react-tradingview-widg
 import styled from "styled-components";
 import CashModal from "./CashModal";
 import StockModal from "./StockModal";
+import SellStockModal from "./SellStockModal";
 import { api } from "../utils/API";
 import { useHistory } from "react-router-dom";
 
@@ -29,15 +30,17 @@ const Portfolios = () => {
   const [netPortfolio, setNetPortfolio] = useState(0);
   const [todaysChange, setTodaysChange] = useState(0);
   const [chartTicker, setChartTicker] = useState("");
+  const [stockToSell, setStockToSell] = useState();
   const [showAddCash, setShowAddCash] = useState(false);
   const [showAddStock, setShowAddStock] = useState(false);
-
-  const history = useHistory();
+  const [showSellStock, setShowSellStock] = useState(false);
 
   const handleCloseCash = () => setShowAddCash(false);
   const handleShowCash = () => setShowAddCash(true);
   const handleCloseStock = () => setShowAddStock(false);
   const handleShowStock = () => setShowAddStock(true);
+  const handleCloseSellStock = () => setShowSellStock(false);
+  const handleShowSellStock = () => setShowSellStock(true);
 
   const handleAddPortfolio = async () => {
     try {
@@ -72,44 +75,23 @@ const Portfolios = () => {
   };
 
   useEffect(() => {
-    const getToken = async () => {
-      try {
-        const res = await fetch(`${api}/gettoken`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await res.json();
-        console.log("token is", data);
-        if (res.ok) {
-          localStorage.setItem("token", data);
-          console.log("token is", data);
-        } else {
-          console.warn(data.message);
-          // history.push("/");
-        }
-      } catch (e) {
-        console.warn(e);
-        console.warn("Could not get token");
-        // history.push("/");
-      }
-    };
-
     const loadPortfolios = async () => {
       try {
         const token = localStorage.getItem("token");
         const res = await fetch(`${api}/portfolios/list`, {
           method: "GET",
           headers: {
+            Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `${token}`,
           },
-          Authorization: `${token}`,
         });
         const data = await res.json();
-
         if (res.ok) {
-          setPortfolios([...data]);
+          setPortfolios([...data.portfolio_list]);
+          if (data) {
+            setCurrPortfolioId(data.portfolio_list[0].portfolio_id);
+          }
         } else {
           console.warn(data.message);
         }
@@ -119,89 +101,7 @@ const Portfolios = () => {
       }
     };
 
-    getToken();
     loadPortfolios();
-
-    setPortfolios([
-      {
-        portfolio_id: 1,
-        title: "Portfolio 1",
-      },
-      {
-        portfolio_id: 2,
-        title: "Portfolio 2",
-      },
-      {
-        portfolio_id: 3,
-        title: "Portfolio 3",
-      },
-      {
-        portfolio_id: 4,
-        title: "Portfolio 4",
-      },
-      {
-        portfolio_id: 5,
-        title: "Portfolio 5",
-      },
-    ]);
-
-    setHoldings([
-      {
-        stock_id: "2000",
-        ticker: "ASX:BPH",
-        company: "BPH Energy Ltd.",
-        live_price: 200.2,
-        change: "0.002 (7.69%)",
-        change_value: 600.4,
-        profit_loss: "6,400.00 (133.33%)",
-        units: 4200,
-        avg_price: 0.15,
-        value: 0.08,
-        weight: 10,
-      },
-      {
-        stock_id: "2000",
-        ticker: "ASX:Z1P",
-        company: "Z1P Co.",
-        live_price: 200.2,
-        change: "0.002 (7.69%)",
-        change_value: 600.4,
-        profit_loss: "6,400.00 (133.33%)",
-        units: 4200,
-        avg_price: 0.15,
-        value: 0.08,
-        weight: 10,
-      },
-      {
-        stock_id: "2000",
-        ticker: "ASX:BPH",
-        company: "BPH Energy Ltd.",
-        live_price: 200.2,
-        change: "0.002 (7.69%)",
-        change_value: 600.4,
-        profit_loss: "6,400.00 (133.33%)",
-        units: 4200,
-        avg_price: 0.15,
-        value: 0.08,
-        weight: 10,
-      },
-      {
-        stock_id: "2000",
-        ticker: "ASX:BPH",
-        company: "BPH Energy Ltd.",
-        live_price: 200.2,
-        change: "0.002 (7.69%)",
-        change_value: 600.4,
-        profit_loss: "6,400.00 (133.33%)",
-        units: 4200,
-        avg_price: 0.15,
-        value: 0.08,
-        weight: 10,
-      },
-    ]);
-
-    setCash(4356214321);
-    setNetPortfolio(94929494);
   }, []);
 
   const handleChangePortfolio = (portfolioId) => {
@@ -215,7 +115,7 @@ const Portfolios = () => {
       const query = { portfolio_id: currPortfolioId };
       try {
         console.log(api);
-        const res = await fetch(`${api}/portfolio/holdings/?` + new URLSearchParams(query), {
+        const res = await fetch(`${api}/portfolio/holdings?` + new URLSearchParams(query), {
           method: "GET",
           headers: {
             Accept: "application/json",
@@ -226,7 +126,7 @@ const Portfolios = () => {
         const data = await res.json();
 
         if (res.ok) {
-          setHoldings([...data]);
+          setHoldings([...data.holdings]);
         } else {
           console.warn(data.message);
         }
@@ -241,7 +141,7 @@ const Portfolios = () => {
 
       const query = { portfolio_id: currPortfolioId };
       try {
-        const res = await fetch(`${api}/portfolio/getbalance/?` + new URLSearchParams(query), {
+        const res = await fetch(`${api}/portfolio/getbalance?` + new URLSearchParams(query), {
           method: "GET",
           headers: {
             Accept: "application/json",
@@ -280,21 +180,22 @@ const Portfolios = () => {
 
       const avgChangePercent =
         holdings.length !== 0 ? (changePercent / holdings.length).toFixed(2) : 0;
-      setTodaysChange(`$${changeValue} (${avgChangePercent}%)`);
+      setTodaysChange(`${changeValue} (${avgChangePercent}%)`);
     };
 
     loadHoldings();
     loadBalance();
     loadNetPortfolio();
     loadTodaysChange();
-  }, [currPortfolioId]);
+    console.log(currPortfolioId, holdings);
+  }, [currPortfolioId, holdings]);
 
   const handleDeletePortfolio = async () => {
     const token = localStorage.getItem("token");
 
     const query = { portfolio_id: currPortfolioId };
     try {
-      const res = await fetch(`${api}/portfolios/removeportfolio/?` + new URLSearchParams(query), {
+      const res = await fetch(`${api}/portfolios/removeportfolio?` + new URLSearchParams(query), {
         method: "DELETE",
         headers: {
           Accept: "application/json",
@@ -308,7 +209,7 @@ const Portfolios = () => {
         const index = portfolios.map((e) => e.portfolio_id).indexOf(currPortfolioId);
         const newPortfoliosList = portfolios;
         newPortfoliosList.splice(index, 1);
-        setPortfolios(newPortfoliosList);
+        setPortfolios([...newPortfoliosList]);
       } else {
         console.warn(data.message);
       }
@@ -317,6 +218,16 @@ const Portfolios = () => {
       console.warn("Could not get portfolios");
     }
   };
+
+  const handleSetChartTicker = (ticker) => {
+    if (ticker.endsWith(".AX")) {
+      const newTicker = ticker.slice(0, -3);
+      setChartTicker(`ASX:${newTicker}`);
+    } else {
+      setChartTicker(ticker);
+    }
+  };
+
   return (
     <>
       <LoggedInNavbar />
@@ -333,6 +244,16 @@ const Portfolios = () => {
         portfolioId={currPortfolioId}
         setHoldings={setHoldings}
         holdings={holdings}
+      />
+      <SellStockModal
+        show={showSellStock}
+        handleClose={handleCloseSellStock}
+        portfolioId={currPortfolioId}
+        setHoldings={setHoldings}
+        holdings={holdings}
+        cash={cash}
+        setCash={setCash}
+        stock={stockToSell}
       />
       <PortfolioContainer>
         <Row>
@@ -426,7 +347,7 @@ const Portfolios = () => {
                 </PortfoliosRow>
                 <PortfoliosRow className="align-items-center my-3 py-2 rounded" md={12}>
                   <Col md={12} className="table-col px-2">
-                    <Table style={{ backgroundColor: "#293240" }} striped bordered hover>
+                    <Table style={{ backgroundColor: "#293240" }} striped hover>
                       <thead>
                         <tr>
                           <th>#</th>
@@ -449,7 +370,7 @@ const Portfolios = () => {
                             <td
                               className="stock-clickable"
                               onClick={() => {
-                                setChartTicker(stock.ticker);
+                                handleSetChartTicker(stock.ticker);
                               }}
                             >
                               {key + 1}
@@ -457,7 +378,7 @@ const Portfolios = () => {
                             <td
                               className="stock-clickable"
                               onClick={() => {
-                                setChartTicker(stock.ticker);
+                                handleSetChartTicker(stock.ticker);
                               }}
                             >
                               {stock.ticker}
@@ -465,22 +386,30 @@ const Portfolios = () => {
                             <td
                               className="stock-clickable"
                               onClick={() => {
-                                setChartTicker(stock.ticker);
+                                handleSetChartTicker(stock.ticker);
                               }}
                             >
                               {stock.company}
                             </td>
                             <td>{stock.units}</td>
-                            <td>${stock.avg_price}</td>
-                            <td>${stock.live_price}</td>
-                            <td>${stock.value}</td>
-                            <td>${stock.profit_loss}</td>
-                            <td>${stock.change}</td>
-                            <td>${stock.change_value}</td>
+                            <td>{stock.avg_price}</td>
+                            <td>{stock.live_price}</td>
+                            <td>{stock.value}</td>
+                            <td>{stock.profit_loss}</td>
+                            <td>{stock.change}</td>
+                            <td>{stock.change_value}</td>
                             <td>{stock.weight}%</td>
                             <td>
                               <Row md={12} className="align-items-center justify-content-center">
-                                <Button className="mx-2 mb-1 w-100">Sell</Button>
+                                <Button
+                                  onClick={() => {
+                                    setStockToSell(stock);
+                                    handleShowSellStock();
+                                  }}
+                                  className="mx-2 mb-1 w-100"
+                                >
+                                  Sell
+                                </Button>
                                 <Button className="mx-2 mt-1 w-100">Remove</Button>
                               </Row>
                             </td>

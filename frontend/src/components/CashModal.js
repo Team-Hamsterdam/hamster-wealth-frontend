@@ -24,14 +24,22 @@ const CashModal = ({ show, handleClose, portfolioId, setCash, cash }) => {
       setShowAlert(false);
       return;
     }
+    const body = {
+      portfolio_id: portfolioId,
+      cash_amount: parseInt(cashAmount),
+    };
 
+    console.log(body);
     try {
-      const body = {
-        portfolio_id: portfolioId,
-        cash_amount: cashAmount,
-      };
-
-      const res = await api.postAPIRequestBodyToken("portfolio/addcash", body, token);
+      const res = await fetch(`${api}/portfolio/addcash`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+        body: JSON.stringify(body),
+      });
 
       if (res.ok) {
         setShowAlert(false);

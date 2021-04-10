@@ -3,7 +3,7 @@ import { Col, Container, Form, Nav, Row, Button, Alert } from "react-bootstrap";
 import LoggedOutNavbar from "./LoggedOutNavbar";
 import styled from "styled-components";
 import { api } from "../utils/API";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 const StyledContainer = styled(Container)`
   background-color: #1f2937;
@@ -14,9 +14,10 @@ const LoginContainer = styled.div`
   padding: 50px;
 `;
 
-const Login = () => {
+const Register = () => {
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [password1, setPassword1] = useState("");
+  const [password2, setPassword2] = useState("");
   const [alertText, setAlertText] = useState("");
   const [alertType, setAlertType] = useState("danger");
   const [showAlert, setShowAlert] = useState(false);
@@ -29,18 +30,26 @@ const Login = () => {
       setAlertText("Username can't be empty");
       return;
     }
-    if (!password) {
+
+    if (!password1 || !password2) {
       setShowAlert(true);
-      setAlertText("Password can't be empty");
+      setAlertText("Passwords can't be empty");
+      return;
+    }
+
+    if (password1 !== password2) {
+      setShowAlert(true);
+      setAlertText("Passwords must match");
       return;
     }
 
     const body = {
       username: username,
-      password: password,
+      password: password1,
     };
+
     try {
-      const res = await fetch(`${api}/auth/login`, {
+      const res = await fetch(`${api}/auth/register`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -59,7 +68,7 @@ const Login = () => {
     } catch (e) {
       console.warn(e);
       setShowAlert(true);
-      setAlertText("Invalid Credentials. Please check your username/password and try again");
+      setAlertText(`An unexpected error has occured`);
     }
   };
   return (
@@ -68,7 +77,7 @@ const Login = () => {
       <StyledContainer md={12} className="d-flex justify-content-center" fluid>
         <Row md={12}>
           <Col md={12}>
-            <h4 className="display-4 white mb-4">Log In</h4>
+            <h4 className="display-4 white mb-4">Register</h4>
             <LoginContainer className="rounded">
               <Form>
                 <Alert
@@ -96,7 +105,17 @@ const Login = () => {
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     onChange={(e) => {
-                      setPassword(e.target.value);
+                      setPassword1(e.target.value);
+                    }}
+                    type="password"
+                    placeholder="Password"
+                  />
+                </Form.Group>
+                <Form.Group controlId="formBasicPassword">
+                  <Form.Label>Confirm Password</Form.Label>
+                  <Form.Control
+                    onChange={(e) => {
+                      setPassword2(e.target.value);
                     }}
                     type="password"
                     placeholder="Password"
@@ -111,20 +130,20 @@ const Login = () => {
                       handleLogin();
                     }}
                   >
-                    Log In
+                    Register
                   </Button>
                 </Row>
                 <Row className="mx-0 d-flex justify-content-center align-items-center">
-                  <p className="my-0 mt-4">Need an account?</p>
+                  <p className="my-0 mt-4">Already have an account?</p>
                 </Row>
                 <Row className="mx-0 mt-2 p-0 d-flex justify-content-center align-items-center">
                   <Button
                     variant="primary"
                     onClick={() => {
-                      history.push("/register");
+                      history.push("/");
                     }}
                   >
-                    Register
+                    Log In
                   </Button>
                 </Row>
               </Form>
@@ -135,5 +154,4 @@ const Login = () => {
     </>
   );
 };
-
-export default Login;
+export default Register;

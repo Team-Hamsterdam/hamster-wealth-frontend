@@ -64,3 +64,12 @@
 .table-bordered td, .table-bordered th {
   color: #f5f5f5 !important;
 }
+
+.table-hover tbody tr:hover {
+  color: white;
+  background-color: rgba(0,0,0,.075);
+}
+
+.table {
+  color: white;
+}

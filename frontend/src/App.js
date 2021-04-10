@@ -4,12 +4,14 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Portfolios from "./components/Portfolios";
 import Leaderboard from "./components/Leaderboard";
+import Register from "./components/Register";
 
 function App() {
   return (
     <>
       <Router>
         <Route exact path="/" component={Login} />
+        <Route path="/register" component={Register} />
         <Route path="/portfolios" component={Portfolios} />
         <Route path="/leaderboard" component={Leaderboard} />
       </Router>
