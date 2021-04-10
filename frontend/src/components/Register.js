@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Col, Container, Form, Nav, Row, Button, Alert } from "react-bootstrap";
+import { Col, Container, Form, Row, Button, Alert } from "react-bootstrap";
 import LoggedOutNavbar from "./LoggedOutNavbar";
 import styled from "styled-components";
 import { api } from "../utils/API";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const StyledContainer = styled(Container)`
   background-color: #1f2937;

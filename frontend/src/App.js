@@ -3,7 +3,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Portfolios from "./components/Portfolios";
-import Leaderboard from "./components/Leaderboard";
+// import Leaderboard from "./components/Leaderboard";
 import About from "./components/About";
 import Register from "./components/Register";
 

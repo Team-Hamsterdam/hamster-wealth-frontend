@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Col, Container, Form, Nav, Row, Button, Alert } from "react-bootstrap";
+import { Col, Container, Form, Row, Button, Alert } from "react-bootstrap";
 import LoggedOutNavbar from "./LoggedOutNavbar";
 import styled from "styled-components";
 import { api } from "../utils/API";

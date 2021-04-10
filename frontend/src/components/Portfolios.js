@@ -7,7 +7,6 @@ import CashModal from "./CashModal";
 import StockModal from "./StockModal";
 import SellStockModal from "./SellStockModal";
 import { api } from "../utils/API";
-import { useHistory } from "react-router-dom";
 
 const PortfolioContainer = styled(Container)`
   background-color: #2c3542;
