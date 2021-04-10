@@ -75,20 +75,15 @@ export default class API {
 
   // Gets user data from given token
   /** @param {String} token */
-  getAPIUserData(token) {
-    return fetch(`${this.url}/user/`, {
+  getAPIRequestToken(path, token) {
+    return fetch(`${this.url}/${path}/`, {
       method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         Authorization: `${token}`,
       },
-    })
-      .then((response) => response.json())
-      .then((responseData) => {
-        return responseData;
-      })
-      .catch((error) => console.warn(error));
+    });
   }
 
   /** @param {String} path */
