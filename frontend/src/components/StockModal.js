@@ -36,6 +36,18 @@ const StockModal = ({ show, handleClose, portfolioId, setHoldings, holdings }) =
       await delay(3000);
       setShowAlert(false);
       return;
+    } else if (isNaN(purchasePrice) || isNaN(parseFloat(purchasePrice))) {
+      setAlertText("Purchase price must be a valid number");
+      setShowAlert(true);
+      await delay(3000);
+      setShowAlert(false);
+      return;
+    } else if (isNaN(quantity) || isNaN(parseFloat(quantity))) {
+      setAlertText("Quantity must be a valid number");
+      setShowAlert(true);
+      await delay(3000);
+      setShowAlert(false);
+      return;
     }
 
     try {
@@ -99,6 +111,7 @@ const StockModal = ({ show, handleClose, portfolioId, setHoldings, holdings }) =
             <Form.Group controlId="avgprice">
               <Form.Label>Average Purchase Price</Form.Label>
               <Form.Control
+                maxLength={7}
                 onChange={(e) => {
                   setPurchasePrice(e.target.value);
                 }}
@@ -110,6 +123,7 @@ const StockModal = ({ show, handleClose, portfolioId, setHoldings, holdings }) =
             <Form.Group controlId="quantity">
               <Form.Label>Quantity</Form.Label>
               <Form.Control
+                maxLength={20}
                 onChange={(e) => {
                   setQuantity(e.target.value);
                 }}
@@ -125,7 +139,7 @@ const StockModal = ({ show, handleClose, portfolioId, setHoldings, holdings }) =
               !isNaN(parseFloat(quantity)) &&
               purchasePrice &&
               quantity
-                ? purchasePrice * quantity
+                ? (purchasePrice * quantity).toFixed(2)
                 : "0"}
             </p>
           </Modal.Body>
