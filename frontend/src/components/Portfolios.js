@@ -51,7 +51,7 @@ const Portfolios = () => {
         },
       });
 
-      const data = res.json();
+      const data = await res.json();
       if (res.ok) {
         setPortfolios([
           ...portfolios,
@@ -80,7 +80,8 @@ const Portfolios = () => {
             "Content-Type": "application/json",
           },
         });
-        const data = res.json();
+        const data = await res.json();
+        console.log("token is", data);
         if (res.ok) {
           localStorage.setItem("token", data);
           console.log("token is", data);
@@ -213,6 +214,7 @@ const Portfolios = () => {
 
       const query = { portfolio_id: currPortfolioId };
       try {
+        console.log(api);
         const res = await fetch(`${api}/portfolio/holdings/?` + new URLSearchParams(query), {
           method: "GET",
           headers: {

@@ -14,9 +14,6 @@ const GreenSpan = styled.span`
 `;
 
 const LoggedOutNavbar = () => {
-  useEffect(() => {
-    console.log(window.location.href);
-  }, []);
   return (
     <DarkNavbar expand="lg">
       <Navbar.Brand as={Link} className="d-flex align-items-center" to="/portfolios">

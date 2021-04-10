@@ -1,14 +1,14 @@
-import React from "react";
-import { Col, Container, Nav, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { Col, Container, Form, Nav, Row, Button, Alert } from "react-bootstrap";
 import LoggedOutNavbar from "./LoggedOutNavbar";
 import styled from "styled-components";
+import { api } from "../utils/API";
 import {
   GithubLoginButton,
   GoogleLoginButton,
   DiscordLoginButton,
 } from "react-social-login-buttons";
-import { api } from "../utils/API";
-
+import { useHistory } from "react-router-dom";
 const StyledContainer = styled(Container)`
   background-color: #1f2937;
 `;
@@ -19,6 +19,53 @@ const LoginContainer = styled.div`
 `;
 
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [alertText, setAlertText] = useState("");
+  const [alertType, setAlertType] = useState("danger");
+  const [showAlert, setShowAlert] = useState(false);
+  const history = useHistory();
+
+  const handleLogin = async () => {
+    if (!username) {
+      setShowAlert(true);
+      setAlertType("danger");
+      setAlertText("Username can't be empty");
+      return;
+    }
+    if (!password) {
+      setShowAlert(true);
+      setAlertText("Password can't be empty");
+      return;
+    }
+
+    const body = {
+      username: username,
+      password: password,
+    };
+    try {
+      const res = await fetch(`${api}/auth/login`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        history.push("/portfolios");
+      } else {
+        setShowAlert(true);
+        setAlertText(`${data.message}`);
+      }
+    } catch (e) {
+      console.warn(e);
+      setShowAlert(true);
+      setAlertText("Invalid Credentials. Please check your username/password and try again");
+    }
+  };
   return (
     <>
       <LoggedOutNavbar />
@@ -27,15 +74,57 @@ const Login = () => {
           <Col md={12}>
             <h4 className="display-4 white mb-4">Log In</h4>
             <LoginContainer className="rounded">
-              <a href={`${api}/login`}>
-                <GoogleLoginButton />
-              </a>
-              <a href={`${api}/githublogin`}>
-                <GithubLoginButton />
-              </a>
-              <a href={`${api}/discordlogin`}>
-                <DiscordLoginButton />
-              </a>
+              <Form>
+                <Alert
+                  style={{ maxWidth: 240 }}
+                  onClose={() => setShowAlert(false)}
+                  dismissible
+                  show={showAlert}
+                  variant={alertType}
+                >
+                  {alertText}
+                </Alert>
+
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                    }}
+                    type="text"
+                    placeholder="Enter username"
+                  />
+                </Form.Group>
+
+                <Form.Group controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                    type="password"
+                    placeholder="Password"
+                  />
+                </Form.Group>
+                <Row className="mx-0 d-flex justify-content-center align-items-center">
+                  <Button
+                    variant="primary w-100"
+                    type="submit"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleLogin();
+                    }}
+                  >
+                    Log In
+                  </Button>
+                </Row>
+                <Row className="mx-0 d-flex justify-content-center align-items-center">
+                  <p className="my-0 mt-4">Need an account?</p>
+                  <Button variant="primary w-100" type="submit">
+                    Register
+                  </Button>
+                </Row>
+              </Form>
             </LoginContainer>
           </Col>
         </Row>

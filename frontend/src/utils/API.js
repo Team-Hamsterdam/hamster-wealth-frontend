@@ -5,5 +5,5 @@
 //   }
 // }
 
-export const api = "https://localhost:4500";
+export const api = "http://localhost:4500";
 // export const api = "https://hamsterwealth.herokuapp.com";
