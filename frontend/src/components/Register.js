@@ -91,7 +91,9 @@ const Register = () => {
                 </Alert>
 
                 <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Username</Form.Label>
+                  <Form.Label>
+                    <span className="white">Username</span>
+                  </Form.Label>
                   <Form.Control
                     onChange={(e) => {
                       setUsername(e.target.value);
@@ -102,7 +104,9 @@ const Register = () => {
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
+                  <Form.Label>
+                    <span className="white">Password</span>
+                  </Form.Label>
                   <Form.Control
                     onChange={(e) => {
                       setPassword1(e.target.value);
@@ -112,7 +116,9 @@ const Register = () => {
                   />
                 </Form.Group>
                 <Form.Group controlId="formBasicPassword">
-                  <Form.Label>Confirm Password</Form.Label>
+                  <Form.Label>
+                    <span className="white">Confirm Password</span>
+                  </Form.Label>
                   <Form.Control
                     onChange={(e) => {
                       setPassword2(e.target.value);
