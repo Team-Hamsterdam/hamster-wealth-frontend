@@ -113,7 +113,7 @@ const SellStockModal = ({
                   setSellPrice(e.target.value);
                 }}
                 type="text"
-                placeholder="420.69"
+                placeholder="421.41"
               />
               <Form.Text className="text-muted">
                 The latest quoted price was {stock ? stock.live_price : 0}
@@ -126,7 +126,7 @@ const SellStockModal = ({
                   setSellQuantity(e.target.value);
                 }}
                 type="text"
-                placeholder="42069"
+                placeholder="63289"
               />
               <Form.Text className="text-muted">
                 You have {stock ? stock.units : 0} units available

@@ -29,7 +29,6 @@ const CashModal = ({ show, handleClose, portfolioId, setCash, cash }) => {
       cash_amount: parseInt(cashAmount),
     };
 
-    console.log(body);
     try {
       const res = await fetch(`${api}/portfolio/addcash`, {
         method: "POST",
@@ -79,7 +78,7 @@ const CashModal = ({ show, handleClose, portfolioId, setCash, cash }) => {
                   setCashAmount(e.target.value);
                 }}
                 type="text"
-                placeholder="42069"
+                placeholder="32841"
               />
               <Form.Text className="text-muted">
                 You can also enter a negative number to remove cash from your portfolio.

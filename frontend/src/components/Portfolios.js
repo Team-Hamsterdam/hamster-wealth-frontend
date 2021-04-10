@@ -173,7 +173,6 @@ const Portfolios = () => {
           return a + parseFloat(b.change_value.substring(1));
         }
       }, 0);
-      console.log(changeValue);
       setTodaysChange(`$${changeValue}`);
     };
 
