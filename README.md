@@ -2,9 +2,13 @@
 ## Our Website
 https://hamsterwealth.netlify.app/
 
+## Demo Video
+[![Hamster Wealth Demo](https://img.youtube.com/vi/zVAsgCCAMMs/0.jpg)](https://www.youtube.com/watch?v=zVAsgCCAMMs)
+
 ## About
 - This React app is hosted on Netlify
 - Hamster Wealth was built for the [Chronicle 2021 hackathon](http://chronicle2021.com/) hosted by the Google Developers Student Club @ University of Melbourne
+- We were finalists ranked within the top 5 teams for the hackathon!
 
 ## Libraries/Frameworks/Languages
 - Javascript, HTML, CSS, React.js, Bootstrap/React-Bootstrap
